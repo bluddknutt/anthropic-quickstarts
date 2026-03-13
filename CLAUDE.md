@@ -262,6 +262,30 @@ npm run build   # Production build
 
 ---
 
+## CI/CD & Pre-commit
+
+### GitHub Actions (`.github/workflows/`)
+
+- **`tests.yaml`** — Triggered on PRs/pushes to main touching `.github/**` or `computer-use-demo/**`
+  - `ruff` job: lint check
+  - `pyright` job: type checking (Python 3.11.6)
+  - `pytest` job: runs `pytest tests/` with JUnit XML output
+
+- **`build.yaml`** — Builds Docker image for `computer-use-demo`
+  - Builds AMD64 + ARM64 images
+  - Pushes to `ghcr.io/anthropics/anthropic-quickstarts` on merges to main
+
+### Pre-commit (`.pre-commit-config.yaml`)
+
+Applies **only to `computer-use-demo/`** on pre-commit and pre-push:
+1. YAML validation, end-of-file fixer, trailing whitespace removal
+2. `ruff --fix-only` → ruff format → ruff lint
+3. `pyright` type checking
+
+Install hooks: `cd computer-use-demo && pre-commit install`
+
+---
+
 ## Cross-Project Conventions
 
 ### API Key
